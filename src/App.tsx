@@ -4,7 +4,6 @@ import Modal from "./components/Modal";
 import Button from "./components/Button";
 import Footer from "./components/Footer.tsx";
 import {createStore} from "solid-js/store";
-import {playAudio} from "./utils/function.ts";
 
 function App() {
 
@@ -13,7 +12,7 @@ function App() {
     const [isSettingsOpen, setIsSettingsOpen] = createSignal<boolean>(false);
     const [isFullScreen, setIsFullScreen] = createSignal<boolean>(false);
     const [timeState, setTimeState] = createStore({
-        pomodoro: 25,
+        pomodoro: 1/60,
         shortBreak: 5,
         longBreak: 10
     });
@@ -87,7 +86,7 @@ function App() {
             }
             if (time() === 0) {
                 handleTimeEnd();
-                playAudio(modalState.audioUrl);
+                playAudio();
                 return;
             }
             update();
@@ -128,7 +127,18 @@ function App() {
         } else {
             document.documentElement.requestFullscreen();
             setIsFullScreen(true);
+
         }
+    }
+
+    function playAudio(){
+        let audio = new Audio(modalState.audioUrl);
+        audio.play();
+        audio.loop = true;
+        setTimeout(() => {
+            audio.pause();
+            audio.currentTime = 0;
+        }, 15000);
     }
 
     return (
