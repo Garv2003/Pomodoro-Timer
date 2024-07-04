@@ -12,7 +12,7 @@ function App() {
     const [isSettingsOpen, setIsSettingsOpen] = createSignal<boolean>(false);
     const [isFullScreen, setIsFullScreen] = createSignal<boolean>(false);
     const [timeState, setTimeState] = createStore({
-        pomodoro: 1/60,
+        pomodoro: 25,
         shortBreak: 5,
         longBreak: 10
     });
