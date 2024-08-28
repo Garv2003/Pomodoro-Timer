@@ -16,6 +16,8 @@ interface Context {
   setModalState: Setter<{ [key: string]: string | number | boolean }>;
   isPlaying: Accessor<boolean>;
   handleTimeEnd: () => void;
+  isVisibility: Accessor<boolean>;
+  setIsVisibility: Setter<boolean>;
 }
 
 const MyContext = createContext<Context | undefined>(undefined);
@@ -37,6 +39,7 @@ export const Provider = (props: { children: JSX.Element }) => {
   });
   const [time, setTime] = createSignal(timeState.pomodoro * 60);
   const [isPlaying, setIsPlaying] = createSignal<boolean>(false);
+  const [isVisibility, setIsVisibility] = createSignal<boolean>(true);
 
   function handleTimeEnd() {
     setIsPlaying(false);
@@ -110,11 +113,18 @@ export const Provider = (props: { children: JSX.Element }) => {
     let audio = new Audio(modalState.audioUrl);
     audio.play();
     audio.loop = true;
+
+    // if (!isVisibility()) {
+    //   audio.play();
+    //   audio.loop = true;
+    // }
+
     setTimeout(() => {
       audio.pause();
       audio.currentTime = 0;
     }, 15000);
   }
+
   return (
     <MyContext.Provider
       value={{
@@ -131,6 +141,8 @@ export const Provider = (props: { children: JSX.Element }) => {
         setModalState,
         isPlaying,
         handleTimeEnd,
+        isVisibility,
+        setIsVisibility,
       }}
     >
       {props.children}

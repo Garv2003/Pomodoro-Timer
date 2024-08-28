@@ -8,7 +8,7 @@ type ButtonProps = {
 const Button = (props: ButtonProps) => {
     return (
         <button
-            class="hover:bg-white hover:text-black text-3xl font-bold py-2 px-4 rounded-2xl"
+            class="hover:bg-white hover:text-black text-xl sm:text-2xl md:text-3xl font-bold py-1.5 px-2.5 md:py-2 md:px-4 rounded-2xl"
             onClick={() => props.selectType(props.name)}
             classList={{
                 "bg-white text-black":
