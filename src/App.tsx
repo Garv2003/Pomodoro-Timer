@@ -1,6 +1,6 @@
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
-import {  Header } from "./components";
-import {Navbar, Footer} from "./layouts"
+import { Header } from "./components";
+import { Navbar, Footer } from "./layouts"
 import { useMyContext } from "./context/MyContext.tsx";
 
 function App() {
@@ -39,7 +39,7 @@ function App() {
       e.returnValue = "";
     });
 
-    window.removeEventListener("visibilitychange", function () {});
+    window.removeEventListener("visibilitychange", function () { });
 
     window.removeEventListener("fullscreenchange", () => {
       setIsFullScreen(document.fullscreenElement !== null);
