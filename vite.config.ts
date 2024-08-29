@@ -49,7 +49,7 @@ const manifestForPlugIn: Partial<VitePWAOptions> = {
     ]
   },
   workbox: {
-    globPatterns: ['**/*.{js,css,html,png,jpg,svg}'],
+    globPatterns: ['**/*.{js,css,html,png,jpg,svg,ttf}'],
   },
   registerType: 'autoUpdate',
   devOptions: {
