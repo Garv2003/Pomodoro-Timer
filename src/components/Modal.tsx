@@ -174,7 +174,7 @@ function Modal(props: ModalProps) {
       onClick={props.onClose}
     >
       <div
-        class="bg-black text-white p-5 flex flex-col justify-center items-center rounded-xl w-[500px] h-[480px] space-y-4 z-10 transition-all duration-500"
+        class="bg-black text-white p-5 md:p-8 lg:p-10 flex flex-col justify-center items-center rounded-xl w-full sm:w-[400px] md:w-[500px] h-auto sm:h-[400px] md:h-[480px] space-y-4 z-10 transition-all duration-500"
         onClick={(e) => e.stopPropagation()}
       >
         <button class="flex justify-end w-full" onClick={props.onClose}>

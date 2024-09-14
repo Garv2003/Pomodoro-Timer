@@ -1,32 +1,34 @@
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { Header } from "./components";
-import { Navbar, Footer } from "./layouts"
+import { Navbar, Footer } from "./layouts";
 import { useMyContext } from "./context/MyContext.tsx";
 
 function App() {
-  const { type, setTimeBasedOnType, modalState, setIsVisibility } =
-    useMyContext();
+  const { type, setTimeBasedOnType, modalState, setIsVisibility } = useMyContext();
   const [isFullScreen, setIsFullScreen] = createSignal<boolean>(false);
 
+  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = "";
+  };
+
+  const handleVisibilityChange = async () => {
+    if (document.visibilityState === "visible") {
+      await wakeScreen();
+      setIsVisibility(true);
+    } else if (document.visibilityState === "hidden") {
+      setIsVisibility(false);
+    }
+  };
+
+  const handleFullScreenChange = () => {
+    setIsFullScreen(document.fullscreenElement !== null);
+  };
+
   onMount(() => {
-    window.addEventListener("beforeunload", function (e) {
-      e.preventDefault();
-      e.returnValue = "";
-    });
-
-    window.addEventListener("visibilitychange", async function () {
-      if (document.visibilityState === "visible") {
-        await wakeScreen();
-        setIsVisibility(true);
-      }
-      if (document.visibilityState === "hidden") {
-        setIsVisibility(false);
-      }
-    });
-
-    window.addEventListener("fullscreenchange", () => {
-      setIsFullScreen(document.fullscreenElement !== null);
-    });
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("fullscreenchange", handleFullScreenChange);
   });
 
   createEffect(() => {
@@ -34,20 +36,18 @@ function App() {
   });
 
   onCleanup(() => {
-    window.removeEventListener("beforeunload", function (e) {
-      e.preventDefault();
-      e.returnValue = "";
-    });
-
-    window.removeEventListener("visibilitychange", function () { });
-
-    window.removeEventListener("fullscreenchange", () => {
-      setIsFullScreen(document.fullscreenElement !== null);
-    });
+    window.removeEventListener("beforeunload", handleBeforeUnload);
+    window.removeEventListener("visibilitychange", handleVisibilityChange);
+    window.removeEventListener("fullscreenchange", handleFullScreenChange);
   });
 
   async function wakeScreen() {
-    await navigator.wakeLock.request("screen");
+    try {
+      await navigator.wakeLock.request("screen");
+      console.log('Wake Lock is active');
+    } catch (err: any) {
+      console.error(`${err.name}, ${err.message}`);
+    }
   }
 
   function toggleFullScreen() {
@@ -64,7 +64,7 @@ function App() {
     <div
       class="bg-black flex flex-col justify-center items-center h-screen bg-center bg-cover bg-no-repeat text-white transition-[background-image] duration-500 p-1 md:p-0"
       style={
-        modalState.background != "black"
+        modalState.background !== "black"
           ? `background-image: url(${modalState.background})`
           : "background-color: black"
       }
